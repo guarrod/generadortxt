@@ -37,3 +37,8 @@ td[contenteditable="true"]:focus {
   outline: 2px solid #4CAF50;
   background-color: white;
 }
+
+.invalid-cell {
+  border-color: red !important; /* Ensure it overrides other border styles */
+  background-color: #ffe0e0 !important; /* Light red background */
+}
