@@ -42,3 +42,154 @@ td[contenteditable="true"]:focus {
   border-color: red !important; /* Ensure it overrides other border styles */
   background-color: #ffe0e0 !important; /* Light red background */
 }
+
+/* General Body Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* App Header */
+.app-header {
+  background-color: #160f41;
+  color: white;
+  padding: 1em 20px; /* Added horizontal padding */
+  text-align: center;
+  width: 100%;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.8em;
+}
+
+/* Main Content Container */
+.main-container {
+  max-width: 1440px;
+  margin: 20px auto;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 8px; /* Optional: adds rounded corners */
+}
+
+/* Titles inside main-container */
+.main-container > h1 { /* Target direct child h1 */
+  font-size: 1.6em;
+  color: #160f41;
+  margin-bottom: 10px;
+  text-align: center; /* Center main title */
+}
+
+.subtitle { /* Class for the paragraph subtitle */
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 20px;
+  text-align: center; /* Center subtitle */
+}
+
+/* Content Area for Table and Info Box */
+.content-area {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px; /* Space before buttons */
+}
+
+/* Table Wrapper */
+.table-wrapper {
+  flex: 3; /* Table takes more space */
+  overflow-x: auto; /* Add scroll for table if it overflows */
+}
+
+/* Ensure table takes full width of its wrapper */
+#dataTable {
+  width: 100%;
+  /* Existing table styles (border-collapse, th, td) should be fine */
+  /* margin-bottom: 0; remove default margin if wrapper handles it */
+}
+/* Overriding table margin as table-wrapper or content-area will handle it */
+table#dataTable {
+    margin-bottom: 0;
+}
+
+
+/* Info Box */
+.info-box {
+  flex: 1; /* Info box takes less space */
+  border: 1px solid #ddd;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px; /* Optional */
+  min-width: 250px; /* Prevent it from becoming too narrow */
+}
+
+.info-box h4 {
+  margin-top: 0;
+  color: #160f41;
+  font-size: 1.2em;
+}
+
+.info-box ul {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
+.info-box li {
+  margin-bottom: 8px;
+  font-size: 0.9em;
+}
+
+/* Action Buttons Area */
+.action-buttons {
+  margin-bottom: 20px; /* Space before notification/filename input */
+  /* Add text-align: center; if buttons should be centered */
+}
+
+/* Ensure existing button styles are applied or enhanced */
+/* button { ... } from previous style.css is likely fine */
+
+/* Notification Area */
+#notificationArea {
+  /* The existing inline style is color: red; margin-top: 10px; min-height: 1.2em; */
+  /* We can add more styling here if needed, or rely on inline for now */
+  padding: 5px; /* Add some padding */
+  font-weight: bold;
+}
+
+/* Filename Input Area */
+.filename-input-area {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f9f9f9; /* Light background for this section */
+  border-top: 1px solid #eee;
+  border-radius: 5px; /* Optional */
+}
+
+.filename-input-area label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.filename-input-area input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 250px; /* Decent width for input */
+}
+
+/* Responsive considerations (simple example) */
+@media (max-width: 768px) {
+  .content-area {
+    flex-direction: column; /* Stack table and info box on smaller screens */
+  }
+  .table-wrapper, .info-box {
+    flex: none; /* Reset flex sizing */
+    width: 100%; /* Take full width when stacked */
+  }
+  .info-box {
+    min-width: 0; /* Reset min-width */
+  }
+}

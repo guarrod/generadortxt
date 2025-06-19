@@ -265,9 +265,20 @@ document.addEventListener('DOMContentLoaded', () => {
       content += rowData.join(';') + '\n'; // Use semicolon as a delimiter
     }
 
+    const filenameInput = document.getElementById('txtFilename');
+    let desiredFilename = 'export'; // Default filename
+
+    if (filenameInput && filenameInput.value.trim() !== '') {
+      desiredFilename = filenameInput.value.trim();
+    }
+
+    if (!desiredFilename.toLowerCase().endsWith('.txt')) {
+      desiredFilename += '.txt';
+    }
+
     const blob = new Blob([content], { type: 'text/plain' });
     const anchor = document.createElement('a');
-    anchor.download = 'export.txt';
+    anchor.download = desiredFilename; // Use the new desiredFilename
     anchor.href = window.URL.createObjectURL(blob);
     anchor.style.display = 'none'; // Make the anchor invisible
     document.body.appendChild(anchor);
