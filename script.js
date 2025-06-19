@@ -227,64 +227,77 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Export table data to TXT file
   exportBtn.addEventListener('click', () => {
-    displayNotification(""); // Clear previous notifications at the start
+    displayNotification(""); // Clear previous general notifications
+    const filenameInput = document.getElementById('txtFilename');
+    if (filenameInput) { // Ensure filenameInput exists before removing class
+        filenameInput.classList.remove('invalid-input'); // Clear previous filename input style
+    }
 
-    const mandatoryColumnIndices = [0, 1, 2, 3, 4];
+    // 1. Validate Table Mandatory Fields
     const rows = dataTable.rows; // dataTable is the tbody
-
+    const mandatoryColumnIndices = [0, 1, 2, 3, 4];
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       for (const columnIndex of mandatoryColumnIndices) {
         const cell = row.cells[columnIndex];
         if (cell && cell.textContent.trim() === "") {
           displayNotification("Error: Todas las filas deben tener completos los campos: Código, Descripcion, Forma de pago, Tipo de cuenta/tarjeta y Numero de cuenta/Tarjeta para poder exportar.");
-          validateCell(cell, columnIndex); // Ensure the cell is styled as invalid
-          return; // Prevent export
+          validateCell(cell, columnIndex); // Ensure cell is styled
+          return;
         }
       }
     }
 
-    // If all mandatory fields are filled, proceed with export
-    let content = '';
-    for (let i = 0; i < rows.length; i++) {
-      const cells = rows[i].cells; // These are the TD elements
-      const rowData = [];
-      for (let j = 0; j < cells.length; j++) {
-        let cellValue = cells[j].textContent.trim(); // Use textContent and trim
+    // 2. Validate Filename Input
+    // Ensure filenameInput exists before accessing its value
+    let desiredFilename = "";
+    if (filenameInput) {
+        desiredFilename = filenameInput.value.trim();
+    }
 
-        if (j === 5) { // "Monto máximo" column
-          const numericValue = parseFloat(cellValue);
-          if (!isNaN(numericValue) && isFinite(numericValue)) {
-            cellValue = (numericValue * 100).toString();
-          } else {
-            cellValue = "999999"; // Default value if empty or not a valid number
-          }
-        }
-        rowData.push(cellValue);
+    if (desiredFilename === "") {
+      displayNotification("Error: El nombre del archivo TXT es requerido.");
+      if (filenameInput) { // Ensure filenameInput exists before adding class
+        filenameInput.classList.add('invalid-input');
       }
-      content += rowData.join(';') + '\n'; // Use semicolon as a delimiter
+      return;
     }
 
-    const filenameInput = document.getElementById('txtFilename');
-    let desiredFilename = 'export'; // Default filename
-
-    if (filenameInput && filenameInput.value.trim() !== '') {
-      desiredFilename = filenameInput.value.trim();
-    }
-
+    // 3. Process Filename (add .txt extension)
     if (!desiredFilename.toLowerCase().endsWith('.txt')) {
       desiredFilename += '.txt';
     }
 
-    const blob = new Blob([content], { type: 'text/plain' });
+    // 4. Generate Table Content for Export (IF ALL VALIDATIONS PASSED)
+    let content = '';
+    for (let i = 0; i < rows.length; i++) {
+      const cells = rows[i].cells;
+      const rowData = [];
+      for (let j = 0; j < cells.length; j++) {
+        let cellValue = cells[j].textContent.trim();
+        if (j === 5) { // "Monto máximo" column special handling
+          const numericValue = parseFloat(cellValue);
+          if (!isNaN(numericValue) && isFinite(numericValue)) {
+            cellValue = (numericValue * 100).toString();
+          } else {
+            cellValue = "999999";
+          }
+        }
+        rowData.push(cellValue);
+      }
+      content += rowData.join(';') + '\n';
+    }
+
+    // 5. Create Blob and Trigger Download
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' }); // Added charset
     const anchor = document.createElement('a');
-    anchor.download = desiredFilename; // Use the new desiredFilename
+    anchor.download = desiredFilename;
     anchor.href = window.URL.createObjectURL(blob);
-    anchor.style.display = 'none'; // Make the anchor invisible
+    anchor.style.display = 'none';
     document.body.appendChild(anchor);
     anchor.click();
     document.body.removeChild(anchor);
-    window.URL.revokeObjectURL(anchor.href); // Clean up
+    window.URL.revokeObjectURL(anchor.href);
   });
 
   // Paste from Excel functionality

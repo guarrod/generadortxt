@@ -193,3 +193,8 @@ table#dataTable {
     min-width: 0; /* Reset min-width */
   }
 }
+
+.invalid-input {
+  border: 1px solid red !important; /* Ensure it overrides other border styles if they are very specific */
+  background-color: #ffe0e0; /* Light red background */
+}
