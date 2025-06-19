@@ -115,9 +115,40 @@ function validateCell(cell, columnIndex) {
   return isValid;
 }
 
+function checkRowIsEmpty(rowElement) {
+  if (!rowElement) {
+    return false; // Or handle error appropriately
+  }
+  const cells = rowElement.getElementsByTagName('td');
+  for (let i = 0; i < cells.length; i++) {
+    if (cells[i].textContent.trim() !== "") {
+      return false; // Row is not empty
+    }
+  }
+  return true; // All cells are empty
+}
+
+function handleRowRemoval(rowElement) {
+  if (!rowElement) {
+    return;
+  }
+  if (checkRowIsEmpty(rowElement)) {
+    rowElement.remove();
+  }
+}
+
+function checkAndRemoveAllEmptyRows() {
+  const rows = dataTable.rows; // dataTable is the tbody, defined in DOMContentLoaded
+  for (let i = rows.length - 1; i >= 0; i--) {
+    // Iterating backwards is safer when removing elements from a live HTMLCollection
+    handleRowRemoval(rows[i]);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const addRowBtn = document.getElementById('addRowBtn');
   const exportBtn = document.getElementById('exportBtn');
+  // Define dataTable here so it's in scope for checkAndRemoveAllEmptyRows
   const dataTable = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
 
   // Function to create and append a new row
@@ -134,6 +165,10 @@ document.addEventListener('DOMContentLoaded', () => {
           if (tipoCuentaCell) {
             validateCell(tipoCuentaCell, 3); // Re-validate it
           }
+        }
+        const parentRow = event.target.closest('tr');
+        if (parentRow) {
+          handleRowRemoval(parentRow);
         }
       });
     }
@@ -158,6 +193,10 @@ document.addEventListener('DOMContentLoaded', () => {
               validateCell(tipoCuentaCell, 3); // Re-validate it
             }
           }
+        const parentRow = event.target.closest('tr');
+        if (parentRow) {
+          handleRowRemoval(parentRow);
+        }
         });
       }
     }
@@ -256,5 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+    checkAndRemoveAllEmptyRows(); // Call after paste processing is complete
   });
 });
