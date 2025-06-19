@@ -23,6 +23,22 @@ function validateCell(cell, columnIndex) {
   const validation = columnValidations[columnIndex];
   cell.classList.remove('invalid-cell'); // Reset style first
 
+  // Specific handling for Email column (index 6) to make it optional
+  if (columnIndex === 6) {
+    if (text.length === 0) {
+      isValid = true; // Empty email is explicitly valid
+    } else {
+      // Not empty, so apply all existing email validation rules
+      if (validation.maxLength && text.length > validation.maxLength) isValid = false;
+      if (isValid && validation.allowedCharsRegex && !validation.allowedCharsRegex.test(text)) isValid = false;
+      if (isValid && validation.regex && !validation.regex.test(text)) isValid = false;
+    }
+    if (!isValid) {
+      cell.classList.add('invalid-cell');
+    }
+    return isValid; // Return early for email column
+  }
+
   if (columnIndex === 3 && validation && validation.conditional) {
     const formaDePagoCell = cell.parentElement.cells[2]; // Get 'Forma de pago' cell
     const formaDePagoValue = formaDePagoCell ? formaDePagoCell.textContent.trim().toUpperCase() : "";
@@ -145,6 +161,13 @@ function checkAndRemoveAllEmptyRows() {
   }
 }
 
+function displayNotification(message) {
+  const notificationDiv = document.getElementById('notificationArea');
+  if (notificationDiv) {
+    notificationDiv.textContent = message;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const addRowBtn = document.getElementById('addRowBtn');
   const exportBtn = document.getElementById('exportBtn');
@@ -204,6 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Export table data to TXT file
   exportBtn.addEventListener('click', () => {
+    displayNotification(""); // Clear previous notifications at the start
+
     const mandatoryColumnIndices = [0, 1, 2, 3, 4];
     const rows = dataTable.rows; // dataTable is the tbody
 
@@ -212,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
       for (const columnIndex of mandatoryColumnIndices) {
         const cell = row.cells[columnIndex];
         if (cell && cell.textContent.trim() === "") {
-          alert("Error: Todas las filas deben tener completos los campos: Código, Descripcion, Forma de pago, Tipo de cuenta/tarjeta y Numero de cuenta/Tarjeta para poder exportar.");
+          displayNotification("Error: Todas las filas deben tener completos los campos: Código, Descripcion, Forma de pago, Tipo de cuenta/tarjeta y Numero de cuenta/Tarjeta para poder exportar.");
           validateCell(cell, columnIndex); // Ensure the cell is styled as invalid
           return; // Prevent export
         }
