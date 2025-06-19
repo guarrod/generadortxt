@@ -85,14 +85,12 @@ h1,h4,p{
   font-size: 1.6em;
   color: #160f41;
   margin-bottom: 10px;
-  text-align: center; /* Center main title */
 }
 
 .subtitle { /* Class for the paragraph subtitle */
   font-size: 1.1em;
   color: #555;
   margin-bottom: 20px;
-  text-align: center; /* Center subtitle */
 }
 
 /* Content Area for Table and Info Box */
