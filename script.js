@@ -2,19 +2,19 @@ function validateCell(cell, columnIndex) {
   const text = cell.textContent.trim();
   let isValid = true;
   const columnValidations = [
-    // Col 0: Código: Alphanumeric, Max 50 chars
-    { regex: /^[a-zA-Z0-9]*$/, maxLength: 50 },
-    // Col 1: Descripcion: Alphanumeric, Max 100 chars
-    { regex: /^[a-zA-Z0-9\s]*$/, maxLength: 100 }, // Added \s for spaces
-    // Col 2: Forma de pago: "CTA" or "TAR"
-    { options: ["CTA", "TAR"] },
-    // Col 3: Tipo de cuenta/tarjeta: Conditional validation
-    { conditional: true },
-    // Col 4: Numero de cuenta/Tarjeta: Alphanumeric, Max 20
-    { regex: /^[a-zA-Z0-9]*$/, maxLength: 20 },
-    // Col 5: Monto máximo: Numeric
+    // Col 0: Código: Alphanumeric, Max 50 chars, Required
+    { regex: /^[a-zA-Z0-9]*$/, maxLength: 50, required: true },
+    // Col 1: Descripcion: Alphanumeric, Max 100 chars, Required
+    { regex: /^[a-zA-Z0-9\s]*$/, maxLength: 100, required: true }, // Added \s for spaces
+    // Col 2: Forma de pago: "CTA" or "TAR", Required
+    { options: ["CTA", "TAR"], required: true },
+    // Col 3: Tipo de cuenta/tarjeta: Conditional validation, Required
+    { conditional: true, required: true },
+    // Col 4: Numero de cuenta/Tarjeta: Alphanumeric, Max 20, Required
+    { regex: /^[a-zA-Z0-9]*$/, maxLength: 20, required: true },
+    // Col 5: Monto máximo: Numeric (Not required for now based on problem description)
     { numeric: true },
-    // Col 6: Email: Specific format, allowed chars, Max 100
+    // Col 6: Email: Specific format, allowed chars, Max 100 (Not required for now)
     { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, maxLength: 100, allowedCharsRegex: /^[a-zA-Z0-9@._\-]*$/ },
     // Col 7: Teléfono: Numeric, Max 9
     { regex: /^[0-9]*$/, maxLength: 9 }
@@ -27,106 +27,91 @@ function validateCell(cell, columnIndex) {
     const formaDePagoCell = cell.parentElement.cells[2]; // Get 'Forma de pago' cell
     const formaDePagoValue = formaDePagoCell ? formaDePagoCell.textContent.trim().toUpperCase() : "";
     let allowedTypes = [];
-    let typeIsValid = false;
+    // isValid is initialized to true at the start of the function.
+    // For column 3, we manage 'isValid' directly.
 
-    if (formaDePagoValue === "CTA") {
-      allowedTypes = ["CTE", "AHO"];
-    } else if (formaDePagoValue === "TAR") {
-      allowedTypes = ["A", "V", "M"];
-    }
-
-    if (text.length === 0) { // Empty is considered valid for this field
-      typeIsValid = true;
-    } else if (allowedTypes.length > 0 && allowedTypes.includes(text.toUpperCase())) {
-      typeIsValid = true;
-      cell.textContent = text.toUpperCase(); // Normalize to uppercase if valid
-    } else if (allowedTypes.length === 0 && text.length > 0) {
-      // Forma de pago is not CTA/TAR (or empty/invalid), so any text here is invalid
-      typeIsValid = false;
-    } else if (allowedTypes.length > 0 && !allowedTypes.includes(text.toUpperCase())) {
-      // Forma de pago IS CTA/TAR, but text is not in the allowed list for it
-      typeIsValid = false;
+    if (validation.required && text.length === 0) {
+      isValid = false;
+    } else if (text.length === 0 && !validation.required) { // Not required and empty
+      isValid = true; // This path won't be taken if required:true as per current subtask
     } else {
-      // Default case: forma de pago is something else and text is empty (already handled by text.length === 0)
-      // or forma de pago is cta/tar and text is empty (also handled)
-      typeIsValid = text.length === 0;
-    }
+      // Field is not empty, or it's empty but not required (latter won't happen for col 3 now)
+      // Proceed with CTA/TAR logic
+      if (formaDePagoValue === "CTA") {
+        allowedTypes = ["CTE", "AHO"];
+      } else if (formaDePagoValue === "TAR") {
+        allowedTypes = ["A", "V", "M"];
+      }
 
-    isValid = typeIsValid;
+      if (allowedTypes.length > 0 && allowedTypes.includes(text.toUpperCase())) {
+        isValid = true;
+        cell.textContent = text.toUpperCase(); // Normalize to uppercase if valid
+      } else if (allowedTypes.length === 0 && text.length > 0) {
+        // Forma de pago is not CTA/TAR (or empty/invalid), so any non-empty text here is invalid
+        isValid = false;
+      } else if (allowedTypes.length > 0 && !allowedTypes.includes(text.toUpperCase())) {
+        // Forma de pago IS CTA/TAR, but text is not in the allowed list for it
+        isValid = false;
+      } else if (allowedTypes.length === 0 && text.length === 0 && validation.required) {
+        // This case means Forma de pago is not set, cell is empty, and it's required
+        isValid = false;
+      } else if (allowedTypes.length === 0 && text.length === 0 && !validation.required){
+        // Forma de pago not set, cell is empty, and not required
+        isValid = true;
+      }
+       // If text.length > 0 and allowedTypes is empty (meaning formaDePagoValue is not CTA/TAR), it's invalid.
+       // If text.length === 0, it's handled by required check.
+    }
 
     if (!isValid) {
       cell.classList.add('invalid-cell');
     }
-    // cell.classList.remove is handled by the initial call at the function start
     return isValid; // Return early for conditional logic of column 3
   }
 
   if (!validation) {
-    return true; // No validation for this column
+    return true; // No validation for this column (already handled if !validation at start)
   }
 
-  if (validation.maxLength && text.length > validation.maxLength) {
+  // Standard validation checks - proceed if isValid is still true
+  if (isValid && validation.maxLength && text.length > validation.maxLength) {
     isValid = false;
   }
 
-  // New check for allowed characters if the property exists
-  if (validation.allowedCharsRegex && !validation.allowedCharsRegex.test(text)) {
+  if (isValid && validation.allowedCharsRegex && !validation.allowedCharsRegex.test(text)) {
     isValid = false;
   }
 
-  // Original regex check (for structure, like email format, or specific options)
-  if (validation.regex && !validation.regex.test(text)) {
+  if (isValid && validation.regex && !validation.regex.test(text)) {
     isValid = false;
   }
 
-  // Allow empty values for regex/maxLength/allowedCharsRegex checks unless specifically disallowed
-  // Allow empty values for regex/maxLength/allowedCharsRegex checks unless specifically disallowed
-  // For example, an empty string is valid for alphanumeric or email unless a "required" flag is added
-  if (text.length === 0 && (validation.regex || validation.maxLength || validation.allowedCharsRegex)) {
-      // If field is empty, and it's not 'Forma de pago' or 'Monto Máximo' which might be mandatory
-      // or have specific non-empty rules. For now, allow empty for these fields.
-      // This means an empty "Código", "Descripcion", "Email", "Numero de cuenta/Tarjeta", "Teléfono" is valid.
-      // If they were mandatory, we'd need another flag e.g. { required: true }
-      isValid = true;
-  }
-
-  // This block should not run for column 3 due to early return.
-  if (validation.options) {
+  if (isValid && validation.options) {
     if (!validation.options.includes(text.toUpperCase())) {
       isValid = false;
     } else {
-      // Normalize to uppercase if valid (for CTA/TAR)
-      cell.textContent = text.toUpperCase();
+      cell.textContent = text.toUpperCase(); // Normalize
     }
   }
 
-  // This block should not run for column 3 due to early return.
-  if (validation.numeric) {
-    // Basic numeric check, allows for decimals.
-    // Allows empty string, as it's not explicitly "required".
-    // Use !isNaN(parseFloat(text)) for basic check if not empty, and isFinite for actual numbers
+  if (isValid && validation.numeric) {
     if (text !== "" && (isNaN(parseFloat(text)) || !isFinite(text))) {
       isValid = false;
     }
+    // Note: if numeric is also required, empty string "" will be caught by the 'required' check below.
+    // If numeric is NOT required, empty string "" is currently valid for numeric.
   }
 
-  // Specific handling for empty required fields:
-  // Forma de pago (column 2) and Monto máximo (column 5) might be implicitly required if not empty.
-  // For now, the logic above allows empty for most fields. If "Forma de pago" must not be empty:
-  if (columnIndex === 2 && text.length === 0) {
-      // This makes "Forma de pago" not mandatory. If it were, set isValid = false.
-      // Let's assume for now it's not strictly mandatory if empty.
-  }
-  // If "Monto máximo" must not be empty:
-  if (columnIndex === 5 && text.length === 0) {
-      // Let's assume for now it's not strictly mandatory if empty.
+  // General 'required' check: if the field is required and empty, it's invalid.
+  // This catches cases where an empty string might pass other rules (e.g., regex with '*')
+  // but is not allowed due to being required.
+  if (validation.required && text.length === 0) {
+    isValid = false;
   }
 
-  // Final class application for non-column 3 validations
   if (!isValid) {
     cell.classList.add('invalid-cell');
   }
-  // If isValid is true, the initial cell.classList.remove('invalid-cell') has already cleaned it.
   return isValid;
 }
 
@@ -180,8 +165,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Export table data to TXT file
   exportBtn.addEventListener('click', () => {
+    const mandatoryColumnIndices = [0, 1, 2, 3, 4];
+    const rows = dataTable.rows; // dataTable is the tbody
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      for (const columnIndex of mandatoryColumnIndices) {
+        const cell = row.cells[columnIndex];
+        if (cell && cell.textContent.trim() === "") {
+          alert("Error: Todas las filas deben tener completos los campos: Código, Descripcion, Forma de pago, Tipo de cuenta/tarjeta y Numero de cuenta/Tarjeta para poder exportar.");
+          validateCell(cell, columnIndex); // Ensure the cell is styled as invalid
+          return; // Prevent export
+        }
+      }
+    }
+
+    // If all mandatory fields are filled, proceed with export
     let content = '';
-    const rows = dataTable.rows;
     for (let i = 0; i < rows.length; i++) {
       const cells = rows[i].cells; // These are the TD elements
       const rowData = [];
