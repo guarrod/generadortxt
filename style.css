@@ -66,6 +66,10 @@ body {
   font-size: 1.8em;
 }
 
+h1,h4,p{
+  text-align: left;
+}
+
 /* Main Content Container */
 .main-container {
   max-width: 1440px;
