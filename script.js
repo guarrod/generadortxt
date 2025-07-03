@@ -1,3 +1,5 @@
+let dataTable; // Declare dataTable globally
+
 function validateCell(cell, columnIndex) {
   const text = cell.textContent.trim();
   let isValid = true;
@@ -149,7 +151,12 @@ function handleRowRemoval(rowElement) {
     return;
   }
   if (checkRowIsEmpty(rowElement)) {
-    rowElement.remove();
+    // Only remove the row if it's empty AND it's not the last remaining row.
+    // dataTable should now be the globally accessible tbody element.
+    if (dataTable && dataTable.rows && dataTable.rows.length > 1) {
+      rowElement.remove();
+    }
+    // If it's the last row and empty (dataTable.rows.length <= 1), it will not be removed.
   }
 }
 
@@ -171,8 +178,8 @@ function displayNotification(message) {
 document.addEventListener('DOMContentLoaded', () => {
   const addRowBtn = document.getElementById('addRowBtn');
   const exportBtn = document.getElementById('exportBtn');
-  // Define dataTable here so it's in scope for checkAndRemoveAllEmptyRows
-  const dataTable = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+  // Assign to the global dataTable variable
+  dataTable = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
 
   // Function to create and append a new row
   function createAndAppendNewRow() {
