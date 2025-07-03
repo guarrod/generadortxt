@@ -18,11 +18,12 @@ th {
 /* Styling for buttons */
 button {
   padding: 10px 15px;
-  background-color: #4CAF50;
+  background-color: #d2006e;
   color: white;
   border: none;
   cursor: pointer;
   margin-right: 10px;
+  border-radius: 8px;
 }
 
 button:hover {
@@ -45,7 +46,7 @@ td[contenteditable="true"]:focus {
 
 /* General Body Styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Nunito', sans-serif;
   margin: 0;
   background-color: #f4f4f4;
   color: #333;
@@ -56,39 +57,39 @@ body {
 .app-header {
   background-color: #160f41;
   color: white;
-  padding: 1em 20px; /* Added horizontal padding */
-  text-align: center;
+  padding: 8px; /* Added horizontal padding */
   width: 100%;
+  height: 32px;
+    img{
+      height: 29px;
+      width: auto
+    };
 }
 
-.app-header h1 {
-  margin: 0;
-  font-size: 1.8em;
-}
 
 /* Main Content Container */
 .main-container {
-  max-width: 1440px;
+  max-width: 1080px;
   margin: 20px auto;
-  background-color: white;
+  background-color: #F9F9F9;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  border-radius: 8px; /* Optional: adds rounded corners */
+  border-radius: 16px; /* Optional: adds rounded corners */
 }
 
 /* Titles inside main-container */
 .main-container > h1 { /* Target direct child h1 */
-  font-size: 1.6em;
+  font-size: 22px;
   color: #160f41;
-  margin-bottom: 10px;
-  text-align: center; /* Center main title */
+  margin-bottom: 0px;
+  text-align: left; /* Center main title */
 }
 
 .subtitle { /* Class for the paragraph subtitle */
-  font-size: 1.1em;
+  font-size: 14px;
   color: #555;
   margin-bottom: 20px;
-  text-align: center; /* Center subtitle */
+  text-align: left; /* Center subtitle */
 }
 
 /* Content Area for Table and Info Box */
@@ -107,6 +108,12 @@ body {
 /* Ensure table takes full width of its wrapper */
 #dataTable {
   width: 100%;
+  border-radius: 8px;
+  border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
   /* Existing table styles (border-collapse, th, td) should be fine */
   /* margin-bottom: 0; remove default margin if wrapper handles it */
 }
