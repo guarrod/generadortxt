@@ -13,6 +13,7 @@ th, td {
 
 th {
   background-color: #f2f2f2;
+  font-size: 14px;
 }
 
 /* Styling for buttons */
@@ -27,7 +28,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #BD0063;
 }
 
 /* Make contenteditable cells look more like inputs */
@@ -71,7 +72,7 @@ body {
 .main-container {
   max-width: 1080px;
   margin: 20px auto;
-  background-color: #F9F9F9;
+  background-color: #ffffff;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   border-radius: 16px; /* Optional: adds rounded corners */
@@ -126,11 +127,11 @@ table#dataTable {
 /* Info Box */
 .info-box {
   flex: 1; /* Info box takes less space */
-  border: 1px solid #ddd;
   padding: 15px;
-  background-color: #f9f9f9;
+  background-color: #F3F7FE;
   border-radius: 5px; /* Optional */
   min-width: 250px; /* Prevent it from becoming too narrow */
+  margin-top: 40px;
 }
 
 .info-box h4 {
