@@ -165,6 +165,7 @@ table#dataTable {
   /* We can add more styling here if needed, or rely on inline for now */
   padding: 5px; /* Add some padding */
   font-weight: bold;
+  color: #DA1E28;
 }
 
 /* Filename Input Area */
