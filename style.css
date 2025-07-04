@@ -6,15 +6,26 @@ table {
 }
 
 th, td {
-  border: 1px solid #ddd;
+  border: 1px solid #fff;
   padding: 8px;
   text-align: left;
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   font-size: 14px;
 }
+
+tr{
+  background-color: #ffffff;
+}
+
+tr:nth-child(even) {
+  td{
+    background-color: #eeeeee;
+  }
+}
+
 
 /* Styling for buttons */
 button {
@@ -33,15 +44,15 @@ button:hover {
 
 /* Make contenteditable cells look more like inputs */
 td[contenteditable="true"] {
-  background-color: #f9f9f9;
+  background-color: #faf8f8;
 }
 td[contenteditable="true"]:focus {
-  outline: 2px solid #4CAF50;
+  border: 1px solid #a9a9a9;
   background-color: white;
 }
 
 .invalid-cell {
-  border-color: red !important; /* Ensure it overrides other border styles */
+  border: 1px solid red !important; /* Ensure it overrides other border styles */
   background-color: #ffe0e0 !important; /* Light red background */
 }
 
@@ -60,20 +71,18 @@ body {
   color: white;
   padding: 8px; /* Added horizontal padding */
   width: 100%;
-  height: 32px;
     img{
-      height: 29px;
+      height: 35px;
       width: auto
-    };
+    }
 }
-
 
 /* Main Content Container */
 .main-container {
   max-width: 1080px;
   margin: 20px auto;
   background-color: #ffffff;
-  padding: 20px;
+  padding: 32px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   border-radius: 16px; /* Optional: adds rounded corners */
 }
@@ -82,7 +91,7 @@ body {
 .main-container > h1 { /* Target direct child h1 */
   font-size: 22px;
   color: #160f41;
-  margin-bottom: 0px;
+  margin: 0px;
   text-align: left; /* Center main title */
 }
 
@@ -110,6 +119,7 @@ body {
 #dataTable {
   width: 100%;
   border-radius: 8px;
+  border-collapse: collapse;
   border-collapse: separate;
       border-spacing: 0;
       border: 1px solid #ccc;
@@ -129,7 +139,7 @@ table#dataTable {
   flex: 1; /* Info box takes less space */
   padding: 15px;
   background-color: #F3F7FE;
-  border-radius: 5px; /* Optional */
+  border-radius: 8px; /* Optional */
   min-width: 250px; /* Prevent it from becoming too narrow */
   margin-top: 40px;
 }
@@ -153,6 +163,7 @@ table#dataTable {
 /* Action Buttons Area */
 .action-buttons {
   margin-bottom: 20px; /* Space before notification/filename input */
+  text-align: right;
   /* Add text-align: center; if buttons should be centered */
 }
 
@@ -172,7 +183,7 @@ table#dataTable {
 .filename-input-area {
   margin-top: 20px;
   padding: 10px;
-  background-color: #f9f9f9; /* Light background for this section */
+  background-color: #ffffff; /* Light background for this section */
   border-top: 1px solid #eee;
   border-radius: 5px; /* Optional */
 }
