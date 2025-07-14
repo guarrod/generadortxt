@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Generador TXT</title>
   <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-
 </head>
 <body>
   <header class="app-header">
-    <img src="bg.png" alt="" srcset="">
+    <h1>Banco Guayaquil</h1>
   </header>
 
   <div class="main-container">
@@ -22,11 +20,11 @@
         <table id="dataTable">
           <thead>
             <tr>
-              <th title="Nombre completo del usuario">Código</th>
-              <th>Descripción</th>
-              <th>Forma de pago</th>
-              <th>Tipo de cuenta/tarjeta</th>
-              <th>Número de cuenta/Tarjeta</th>
+              <th>Código<span class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">Valores alfanuméricos, hasta 50 caracteres. Campo requerido.</span></span></th>
+              <th>Descripcion<span class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">Valores alfanuméricos, hasta 100 caracteres. Campo requerido.</span></span></th>
+              <th>Forma de pago<span class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">Valores permitidos: CTA o TAR. Campo requerido.</span></span></th>
+              <th>Tipo de cuenta/tarjeta<span class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">Si Forma de pago es CTA, permite: CTE o AHO. Si es TAR, permite: A, V, o M. Campo requerido.</span></span></th>
+              <th>Numero de cuenta/Tarjeta<span class="tooltip-container"><span class="tooltip-icon">?</span><span class="tooltip-text">Valores alfanuméricos, hasta 20 caracteres. Campo requerido.</span></span></th>
               <th>Monto máximo</th>
               <th>Email</th>
               <th>Teléfono</th>
@@ -47,22 +45,8 @@
         </table>
       </div> <!-- close table-wrapper -->
 
-    </div> <!-- close content-area -->
-
-    <div class="action-buttons">
-        <button id="addRowBtn">Añadir fila</button>
-        
-    </div>
-    <div id="notificationArea"></div>
-
-    <div class="filename-input-area">
-      <label for="txtFilename">Nombre del archivo TXT:</label>
-      <input type="text" id="txtFilename" placeholder="Ej: miarchivo">
-      <button id="exportBtn">Exportar TXT</button>
-    </div>
-
-          <aside class="info-box">
-        <h4>Consejos para crear tu archivo:</h4>
+      <aside class="info-box">
+        <h4>Consejos para crear tu archivo</h4>
         <ul>
           <li>Solo se exportarán las columnas con información.</li>
           <li>Si copias y pegas desde un excel se crearán las filas necesarias automáticamente.</li>
@@ -70,6 +54,18 @@
           <li>Las celdas de monto máximo que queden vacías pasarán a valer automáticamente 999999.</li>
         </ul>
       </aside>
+    </div> <!-- close content-area -->
+
+    <div class="action-buttons">
+        <button id="addRowBtn">Add Row</button>
+        <button id="exportBtn">Export to TXT</button>
+    </div>
+    <div id="notificationArea" style="color: red; margin-top: 10px; min-height: 1.2em;"></div>
+
+    <div class="filename-input-area">
+      <label for="txtFilename">Nombre del archivo TXT:</label>
+      <input type="text" id="txtFilename" placeholder="Ej: miarchivo">
+    </div>
 
   </div> <!-- close main-container -->
 

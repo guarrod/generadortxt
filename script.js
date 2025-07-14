@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
       for (const columnIndex of mandatoryColumnIndices) {
         const cell = row.cells[columnIndex];
         if (cell && cell.textContent.trim() === "") {
-          displayNotification("Todas las filas deben tener completos los campos: Código, Descripcion, Forma de pago, Tipo de cuenta/tarjeta y Numero de cuenta/Tarjeta para poder exportar.");
+          displayNotification("Error: Todas las filas deben tener completos los campos: Código, Descripcion, Forma de pago, Tipo de cuenta/tarjeta y Numero de cuenta/Tarjeta para poder exportar.");
           validateCell(cell, columnIndex); // Ensure cell is styled
           return;
         }
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (desiredFilename === "") {
-      displayNotification("El nombre del archivo TXT es requerido.");
+      displayNotification("Error: El nombre del archivo TXT es requerido.");
       if (filenameInput) { // Ensure filenameInput exists before adding class
         filenameInput.classList.add('invalid-input');
       }
