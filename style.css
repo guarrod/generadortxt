@@ -6,46 +6,59 @@ table {
 }
 
 th, td {
-  border: 1px solid #ddd;
+  border: 1px solid #fff;
   padding: 8px;
   text-align: left;
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #ffffff;
+  font-size: 14px;
 }
+
+tr{
+  background-color: #ffffff;
+}
+
+tr:nth-child(even) {
+  td{
+    background-color: #eeeeee;
+  }
+}
+
 
 /* Styling for buttons */
 button {
   padding: 10px 15px;
-  background-color: #4CAF50;
+  background-color: #d2006e;
   color: white;
   border: none;
   cursor: pointer;
   margin-right: 10px;
+  border-radius: 8px;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #BD0063;
 }
 
 /* Make contenteditable cells look more like inputs */
 td[contenteditable="true"] {
-  background-color: #f9f9f9;
+  background-color: #faf8f8;
 }
 td[contenteditable="true"]:focus {
-  outline: 2px solid #4CAF50;
+  border: 1px solid #a9a9a9;
   background-color: white;
 }
 
 .invalid-cell {
-  border-color: red !important; /* Ensure it overrides other border styles */
+  border: 1px solid red !important; /* Ensure it overrides other border styles */
   background-color: #ffe0e0 !important; /* Light red background */
 }
 
 /* General Body Styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Nunito', sans-serif;
   margin: 0;
   background-color: #f4f4f4;
   color: #333;
@@ -56,39 +69,37 @@ body {
 .app-header {
   background-color: #160f41;
   color: white;
-  padding: 1em 20px; /* Added horizontal padding */
-  text-align: center;
+  padding: 8px; /* Added horizontal padding */
   width: 100%;
-}
-
-.app-header h1 {
-  margin: 0;
-  font-size: 1.8em;
+    img{
+      height: 35px;
+      width: auto
+    }
 }
 
 /* Main Content Container */
 .main-container {
-  max-width: 1440px;
+  max-width: 1080px;
   margin: 20px auto;
-  background-color: white;
-  padding: 20px;
+  background-color: #ffffff;
+  padding: 32px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  border-radius: 8px; /* Optional: adds rounded corners */
+  border-radius: 16px; /* Optional: adds rounded corners */
 }
 
 /* Titles inside main-container */
 .main-container > h1 { /* Target direct child h1 */
-  font-size: 1.6em;
+  font-size: 22px;
   color: #160f41;
-  margin-bottom: 10px;
-  text-align: center; /* Center main title */
+  margin: 0px;
+  text-align: left; /* Center main title */
 }
 
 .subtitle { /* Class for the paragraph subtitle */
-  font-size: 1.1em;
+  font-size: 14px;
   color: #555;
   margin-bottom: 20px;
-  text-align: center; /* Center subtitle */
+  text-align: left; /* Center subtitle */
 }
 
 /* Content Area for Table and Info Box */
@@ -107,6 +118,13 @@ body {
 /* Ensure table takes full width of its wrapper */
 #dataTable {
   width: 100%;
+  border-radius: 8px;
+  border-collapse: collapse;
+  border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      overflow: hidden;
   /* Existing table styles (border-collapse, th, td) should be fine */
   /* margin-bottom: 0; remove default margin if wrapper handles it */
 }
@@ -119,11 +137,11 @@ table#dataTable {
 /* Info Box */
 .info-box {
   flex: 1; /* Info box takes less space */
-  border: 1px solid #ddd;
   padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 5px; /* Optional */
+  background-color: #F3F7FE;
+  border-radius: 8px; /* Optional */
   min-width: 250px; /* Prevent it from becoming too narrow */
+  margin-top: 40px;
 }
 
 .info-box h4 {
@@ -145,6 +163,7 @@ table#dataTable {
 /* Action Buttons Area */
 .action-buttons {
   margin-bottom: 20px; /* Space before notification/filename input */
+  text-align: right;
   /* Add text-align: center; if buttons should be centered */
 }
 
@@ -157,13 +176,14 @@ table#dataTable {
   /* We can add more styling here if needed, or rely on inline for now */
   padding: 5px; /* Add some padding */
   font-weight: bold;
+  color: #DA1E28;
 }
 
 /* Filename Input Area */
 .filename-input-area {
   margin-top: 20px;
   padding: 10px;
-  background-color: #f9f9f9; /* Light background for this section */
+  background-color: #ffffff; /* Light background for this section */
   border-top: 1px solid #eee;
   border-radius: 5px; /* Optional */
 }
