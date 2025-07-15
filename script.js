@@ -197,7 +197,7 @@ function displayNotification(message, type = 'error') {
 
   // Also update the info-box for phone errors
   if (message.includes("Teléfono")) {
-    const infoBoxList = document.querySelector('.info-box ul');
+    const infoBoxList = document.querySelector('.validations ul');
     // Prevent duplicate messages
     const existingMsg = Array.from(infoBoxList.children).find(li => li.textContent.includes("corregir los datos de Teléfono"));
     if (!existingMsg) {
