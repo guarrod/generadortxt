@@ -48,8 +48,7 @@ function validateCell(cell, columnIndex) {
     } else {
       // Not empty, so apply validation rules
       if (!/^[0-9]*$/.test(text) || text.length !== 10) {
-        isValid = false;
-        displayNotification("El Teléfono debe de ser de 10 dígitos y empezar con cero.");
+        isValid = true;
       } else {
         isValid = true;
         displayNotification("");
