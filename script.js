@@ -44,10 +44,15 @@ function validateCell(cell, columnIndex) {
   if (columnIndex === 7) {
     if (text.length === 0) {
       isValid = true; // Empty is valid
+      displayNotification("");
     } else {
       // Not empty, so apply validation rules
       if (!/^[0-9]*$/.test(text) || text.length !== 10) {
         isValid = false;
+        displayNotification("El Teléfono debe de ser de 10 dígitos y empezar con cero.");
+      } else {
+        isValid = true;
+        displayNotification("");
       }
     }
     if (!isValid) {
@@ -183,10 +188,31 @@ function checkAndRemoveAllEmptyRows() {
   }
 }
 
-function displayNotification(message) {
+function displayNotification(message, type = 'error') {
   const notificationDiv = document.getElementById('notificationArea');
   if (notificationDiv) {
     notificationDiv.textContent = message;
+    notificationDiv.className = `notification ${type}`;
+  }
+
+  // Also update the info-box for phone errors
+  if (message.includes("Teléfono")) {
+    const infoBoxList = document.querySelector('.info-box ul');
+    // Prevent duplicate messages
+    const existingMsg = Array.from(infoBoxList.children).find(li => li.textContent.includes("corregir los datos de Teléfono"));
+    if (!existingMsg) {
+      const newLi = document.createElement('li');
+      newLi.textContent = "Por favor, corregir los datos de Teléfono.";
+      newLi.style.color = "red"; // Or some other highlighting
+      newLi.id = "phone-error-message"; // Add an ID to easily remove it later
+      infoBoxList.appendChild(newLi);
+    }
+  } else {
+    // If there's no phone error, or a different error, remove the message
+    const phoneErrorMsg = document.getElementById('phone-error-message');
+    if (phoneErrorMsg) {
+      phoneErrorMsg.remove();
+    }
   }
 }
 
