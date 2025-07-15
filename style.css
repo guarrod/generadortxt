@@ -112,7 +112,7 @@ body {
 /* Table Wrapper */
 .table-wrapper {
   flex: 3; /* Table takes more space */
-  overflow-x: auto; /* Add scroll for table if it overflows */
+  overflow-x: visible; /* Add scroll for table if it overflows */
 }
 
 /* Ensure table takes full width of its wrapper */
@@ -125,7 +125,7 @@ body {
       border-spacing: 0;
       border: 1px solid #ccc;
       border-radius: 8px;
-      overflow: hidden;
+      overflow: visible;
   /* Existing table styles (border-collapse, th, td) should be fine */
   /* margin-bottom: 0; remove default margin if wrapper handles it */
 }
@@ -213,27 +213,31 @@ table#dataTable {
 
     .tooltip-icon {
       display: inline-block;
-      width: 18px;
-      height: 18px;
-      line-height: 18px;
+      width: 14px;
+      height: 14px;
+      line-height: 14px;
       text-align: center;
       border-radius: 50%;
-      background-color: #007BFF;
+      background-color: #b5cde6;
       color: white;
-      font-size: 14px;
+      font-size: 10px;
       font-weight: bold;
       font-family: sans-serif;
+      margin-left: 5px;
+      &:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+      }
     }
 
     .tooltip-text {
       visibility: hidden;
       width: max-content;
       max-width: 200px;
-      background-color: #333;
+      background-color: #160f41;
       color: #fff;
       text-align: left;
-      border-radius: 6px;
-      padding: 8px 10px;
+      border-radius: 16px;
+      padding: 16px;
       position: absolute;
       z-index: 1;
       bottom: 125%; /* aparece encima del icono */
@@ -242,6 +246,7 @@ table#dataTable {
       opacity: 0;
       transition: opacity 0.3s;
       font-size: 13px;
+      font-weight: 400;
       white-space: normal;
     }
 
