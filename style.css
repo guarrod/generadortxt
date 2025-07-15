@@ -22,7 +22,7 @@ tr{
 
 tr:nth-child(even) {
   td{
-    background-color: #eeeeee;
+    background-color: #ffffff;
   }
 }
 
