@@ -18,8 +18,8 @@ function validateCell(cell, columnIndex) {
     { numeric: true },
     // Col 6: Email: Specific format, allowed chars, Max 100 (Not required for now)
     { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, maxLength: 100, allowedCharsRegex: /^[a-zA-Z0-9@._\-]*$/ },
-    // Col 7: Teléfono: Numeric, Max 9
-    { regex: /^[0-9]*$/, maxLength: 9 }
+    // Col 7: Teléfono: Numeric, Max 10
+    { regex: /^[0-9]*$/, maxLength: 10 }
   ];
 
   const validation = columnValidations[columnIndex];
@@ -39,6 +39,21 @@ function validateCell(cell, columnIndex) {
       cell.classList.add('invalid-cell');
     }
     return isValid; // Return early for email column
+  }
+  // Specific handling for Teléfono column (index 7) to make it optional and validate length
+  if (columnIndex === 7) {
+    if (text.length === 0) {
+      isValid = true; // Empty is valid
+    } else {
+      // Not empty, so apply validation rules
+      if (!/^[0-9]*$/.test(text) || text.length !== 10) {
+        isValid = false;
+      }
+    }
+    if (!isValid) {
+      cell.classList.add('invalid-cell');
+    }
+    return isValid; // Return early for this column
   }
 
   if (columnIndex === 3 && validation && validation.conditional) {
