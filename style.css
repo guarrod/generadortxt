@@ -118,6 +118,7 @@ body {
 /* Ensure table takes full width of its wrapper */
 #dataTable {
   width: 100%;
+  overflow: visible;
   border-radius: 8px;
   border-collapse: collapse;
   border-collapse: separate;
@@ -199,6 +200,69 @@ table#dataTable {
   border-radius: 4px;
   min-width: 250px; /* Decent width for input */
 }
+
+
+/* Tooltip */
+
+.tooltip-container {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      z-index: 1000; /* Ensure it appears above other elements */
+    }
+
+    .tooltip-icon {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      line-height: 18px;
+      text-align: center;
+      border-radius: 50%;
+      background-color: #007BFF;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      font-family: sans-serif;
+    }
+
+    .tooltip-text {
+      visibility: hidden;
+      width: max-content;
+      max-width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+      border-radius: 6px;
+      padding: 8px 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%; /* aparece encima del icono */
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 13px;
+      white-space: normal;
+    }
+
+    .tooltip-container:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Opcional: una flechita */
+    .tooltip-text::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -6px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: #333 transparent transparent transparent;
+    }
+
+
 
 /* Responsive considerations (simple example) */
 @media (max-width: 768px) {
