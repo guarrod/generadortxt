@@ -191,17 +191,16 @@ function checkAndRemoveAllEmptyRows() {
 function displayNotification(message, type = 'error') {
   const notificationDiv = document.getElementById('notificationArea');
   if (notificationDiv) {
-    notificationDiv.textContent = message;
+    notificationDiv.innerHTML = message;
     notificationDiv.className = `notification ${type}`;
   }
 
   // Also update the info-box for phone errors
   if (message.includes("Teléfono")) {
-    const infoBoxList = document.querySelector('.info-box ul');
+    const infoBoxList = document.querySelector('#notificationArea');
     // Prevent duplicate messages
     const existingMsg = Array.from(infoBoxList.children).find(li => li.textContent.includes("corregir los datos de Teléfono"));
     if (!existingMsg) {
-      const newLi = document.createElement('li');
       newLi.textContent = "Por favor, corregir los datos de Teléfono.";
       newLi.style.color = "red"; // Or some other highlighting
       newLi.id = "phone-error-message"; // Add an ID to easily remove it later
@@ -289,7 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
       for (const columnIndex of mandatoryColumnIndices) {
         const cell = row.cells[columnIndex];
         if (cell && cell.textContent.trim() === "") {
-          displayNotification("Todas las filas deben tener completos los campos: Código, Descripcion, Forma de pago, Tipo de cuenta/tarjeta y Numero de cuenta/Tarjeta para poder exportar.");
+          displayNotification(`<div>Todas las filas deben tener completos los campos:<br>
+  Código, Descripción, Forma de pago, Tipo de cuenta/tarjeta y Número de cuenta/Tarjeta para poder exportar.</div>`);
           validateCell(cell, columnIndex); // Ensure cell is styled
           return;
         }

@@ -28,16 +28,16 @@ tr:nth-child(even) {
 
 /* Redondear solo las esquinas exteriores */
 tr:first-child th:first-child {
-  border-top-left-radius: 16px;
+  border-top-left-radius: 8px;
 }
 tr:first-child th:last-child {
-  border-top-right-radius: 16px;
+  border-top-right-radius: 8px;
 }
 tr:last-child td:first-child {
-  border-bottom-left-radius: 16px;
+  border-bottom-left-radius: 8px;
 }
 tr:last-child td:last-child {
-  border-bottom-right-radius: 16px;
+  border-bottom-right-radius: 8px;
 }
 
 
@@ -133,12 +133,11 @@ body {
 #dataTable {
   width: 100%;
   overflow: visible;
-
   border-collapse: collapse;
   border-collapse: separate;
       border-spacing: 0;
       border: 1px solid #ccc;
-      border-radius: 16px;
+      border-radius: 8px;
       overflow: visible;
   /* Existing table styles (border-collapse, th, td) should be fine */
   /* margin-bottom: 0; remove default margin if wrapper handles it */
@@ -192,6 +191,11 @@ table#dataTable {
   padding: 5px; /* Add some padding */
   font-weight: bold;
   color: #DA1E28;
+  white-space: pre-line;
+
+  div{
+    font-weight: 400;
+  }
 }
 
 /* Filename Input Area */
