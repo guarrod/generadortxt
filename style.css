@@ -195,6 +195,10 @@ table#dataTable {
 
   div{
     font-weight: 400;
+    line-height: 11px;
+    background-color: #fff3f3;
+    padding: 20px;
+    border-left: 4px solid red;
   }
 }
 
