@@ -26,6 +26,20 @@ tr:nth-child(even) {
   }
 }
 
+/* Redondear solo las esquinas exteriores */
+tr:first-child th:first-child {
+  border-top-left-radius: 16px;
+}
+tr:first-child th:last-child {
+  border-top-right-radius: 16px;
+}
+tr:last-child td:first-child {
+  border-bottom-left-radius: 16px;
+}
+tr:last-child td:last-child {
+  border-bottom-right-radius: 16px;
+}
+
 
 /* Styling for buttons */
 button {
@@ -80,11 +94,11 @@ body {
 /* Main Content Container */
 .main-container {
   max-width: 1080px;
+  border-radius: 16px;
   margin: 20px auto;
   background-color: #ffffff;
   padding: 32px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  border-radius: 16px; /* Optional: adds rounded corners */
 }
 
 /* Titles inside main-container */
@@ -119,12 +133,12 @@ body {
 #dataTable {
   width: 100%;
   overflow: visible;
-  border-radius: 8px;
+
   border-collapse: collapse;
   border-collapse: separate;
       border-spacing: 0;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 16px;
       overflow: visible;
   /* Existing table styles (border-collapse, th, td) should be fine */
   /* margin-bottom: 0; remove default margin if wrapper handles it */
