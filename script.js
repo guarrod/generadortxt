@@ -16,18 +16,18 @@ function validateField(value, index, row) {
     // Col 4: Numero de cuenta/Tarjeta: Alphanumeric, Max 20, Required
     { regex: /^[a-zA-Z0-9]*$/, maxLength: 20, required: true, message: "Alfanumérico, máximo 20 caracteres." },
     // Col 5: Monto máximo: Numeric (Not required for now based on problem description)
-    { numeric: true, message: "Numérico." },
+    { numeric: true, message: "Numérico, corríjelo o elimínalo" },
     // Col 6: Email: Specific format, allowed chars, Max 100 (Not required for now)
-    { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, maxLength: 100, allowedCharsRegex: /^[a-zA-Z0-9@._\-]*$/, message: "Formato de email inválido." },
+    { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, maxLength: 100, allowedCharsRegex: /^[a-zA-Z0-9@._\-]*$/, message: "Formato de email inválido, corríjelo o elimínalo" },
     // Col 7: Teléfono: Numeric, 10 digits
-    { regex: /^[0-9]{10}$/, message: "Debe de ser de 10 dígitos." }
+    { regex: /^[0-9]{10}$/, message: "Debe de ser de 10 dígitos, corríjelo o elimínalo" }
   ];
 
   const validation = columnValidations[index];
   const columnName = columnNames[index];
 
   if (validation.required && text.length === 0) {
-    return { isValid: false, message: `Fila ${row + 1}, ${columnName}: Campo requerido.` };
+    return { isValid: false, message: `Fila ${row + 1}, ${columnName}: es requerido.` };
   }
 
   if (validation.maxLength && text.length > validation.maxLength) {

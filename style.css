@@ -221,6 +221,10 @@ table#dataTable {
 
 .validations.active {
   display: block;
+  background-color: #fdf2f2;
+  border-radius: 12px;
+  padding: 1px;
+  font-size: 14px;
 }
 
 .filename-input-area label {
