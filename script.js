@@ -18,8 +18,8 @@ function validateField(value, index, row) {
     { numeric: true, message: "Monto máximo: Numérico." },
     // Col 6: Email: Specific format, allowed chars, Max 100 (Not required for now)
     { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, maxLength: 100, allowedCharsRegex: /^[a-zA-Z0-9@._\-]*$/, message: "Email: Formato de email inválido." },
-    // Col 7: Teléfono: Numeric, Max 10
-    { regex: /^[0-9]*$/, maxLength: 10, message: "Teléfono: 10 dígitos numéricos." }
+    // Col 7: Teléfono: Numeric, 10 digits
+    { regex: /^[0-9]{10}$/, message: "Teléfono: Debe de ser de 10 dígitos." }
   ];
 
   const validation = columnValidations[index];
