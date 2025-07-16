@@ -32,7 +32,9 @@ function validateField(value, index, row) {
     return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
   }
 
-  if (validation.regex && !validation.regex.test(text)) {
+  if (index === 7 && text.length > 0 && !/^[0-9]{10}$/.test(text)) {
+    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+  } else if (index !== 7 && validation.regex && !validation.regex.test(text)) {
     return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
   }
 
