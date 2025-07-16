@@ -63,14 +63,20 @@ function validateField(value, index, row) {
 
 function displayValidationErrors() {
   const validationList = document.querySelector('.validations ul');
+  const validationsContainer = document.querySelector('.validations');
   validationList.innerHTML = '';
-  for (const key in validations) {
-    if (Object.hasOwnProperty.call(validations, key)) {
+  const validationKeys = Object.keys(validations);
+
+  if (validationKeys.length > 0) {
+    validationsContainer.classList.add('active');
+    validationKeys.forEach(key => {
       const message = validations[key];
       const listItem = document.createElement('li');
       listItem.textContent = message;
       validationList.appendChild(listItem);
-    }
+    });
+  } else {
+    validationsContainer.classList.remove('active');
   }
 }
 

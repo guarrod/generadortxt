@@ -210,6 +210,14 @@ table#dataTable {
   border-radius: 5px; /* Optional */
 }
 
+.validations {
+  display: none;
+}
+
+.validations.active {
+  display: block;
+}
+
 .filename-input-area label {
   margin-right: 10px;
   font-weight: bold;
