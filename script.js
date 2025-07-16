@@ -3,49 +3,51 @@ let validations = [];
 
 function validateField(value, index, row) {
   const text = value.trim();
+  const columnNames = ["Código", "Descripción", "Forma de pago", "Tipo de cuenta/tarjeta", "Número de cuenta/Tarjeta", "Monto máximo", "Email", "Teléfono"];
   const columnValidations = [
     // Col 0: Código: Alphanumeric, Max 50 chars, Required
-    { regex: /^[a-zA-Z0-9]*$/, maxLength: 50, required: true, message: "Código: Alfanumérico, máximo 50 caracteres." },
+    { regex: /^[a-zA-Z0-9]*$/, maxLength: 50, required: true, message: "Alfanumérico, máximo 50 caracteres." },
     // Col 1: Descripcion: Alphanumeric, Max 100 chars, Required
-    { regex: /^[a-zA-Z0-9\s]*$/, maxLength: 100, required: true, message: "Descripción: Alfanumérico, máximo 100 caracteres." },
+    { regex: /^[a-zA-Z0-9\s]*$/, maxLength: 100, required: true, message: "Alfanumérico, máximo 100 caracteres." },
     // Col 2: Forma de pago: "CTA" or "TAR", Required
-    { options: ["CTA", "TAR"], required: true, message: "Forma de pago: CTA o TAR." },
+    { options: ["CTA", "TAR"], required: true, message: "CTA o TAR." },
     // Col 3: Tipo de cuenta/tarjeta: Conditional validation, Required
-    { conditional: true, required: true, message: "Tipo de cuenta/tarjeta: A, V, M para TAR; CTE, AHO para CTA." },
+    { conditional: true, required: true, message: "A, V, M para TAR; CTE, AHO para CTA." },
     // Col 4: Numero de cuenta/Tarjeta: Alphanumeric, Max 20, Required
-    { regex: /^[a-zA-Z0-9]*$/, maxLength: 20, required: true, message: "Número de cuenta/Tarjeta: Alfanumérico, máximo 20 caracteres." },
+    { regex: /^[a-zA-Z0-9]*$/, maxLength: 20, required: true, message: "Alfanumérico, máximo 20 caracteres." },
     // Col 5: Monto máximo: Numeric (Not required for now based on problem description)
-    { numeric: true, message: "Monto máximo: Numérico." },
+    { numeric: true, message: "Numérico." },
     // Col 6: Email: Specific format, allowed chars, Max 100 (Not required for now)
-    { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, maxLength: 100, allowedCharsRegex: /^[a-zA-Z0-9@._\-]*$/, message: "Email: Formato de email inválido." },
+    { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, maxLength: 100, allowedCharsRegex: /^[a-zA-Z0-9@._\-]*$/, message: "Formato de email inválido." },
     // Col 7: Teléfono: Numeric, 10 digits
-    { regex: /^[0-9]{10}$/, message: "Teléfono: Debe de ser de 10 dígitos." }
+    { regex: /^[0-9]{10}$/, message: "Debe de ser de 10 dígitos." }
   ];
 
   const validation = columnValidations[index];
+  const columnName = columnNames[index];
 
   if (validation.required && text.length === 0) {
-    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: Campo requerido.` };
+    return { isValid: false, message: `Fila ${row + 1}, ${columnName}: Campo requerido.` };
   }
 
   if (validation.maxLength && text.length > validation.maxLength) {
-    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+    return { isValid: false, message: `Fila ${row + 1}, ${columnName}: ${validation.message}` };
   }
 
   if (index === 6 && text.length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) {
-    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+    return { isValid: false, message: `Fila ${row + 1}, ${columnName}: ${validation.message}` };
   } else if (index === 7 && text.length > 0 && !/^[0-9]{10}$/.test(text)) {
-    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+    return { isValid: false, message: `Fila ${row + 1}, ${columnName}: ${validation.message}` };
   } else if (![6, 7].includes(index) && validation.regex && !validation.regex.test(text)) {
-    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+    return { isValid: false, message: `Fila ${row + 1}, ${columnName}: ${validation.message}` };
   }
 
   if (validation.options && !validation.options.includes(text.toUpperCase())) {
-    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+    return { isValid: false, message: `Fila ${row + 1}, ${columnName}: ${validation.message}` };
   }
 
   if (validation.numeric && text !== "" && (isNaN(parseFloat(text)) || !isFinite(text))) {
-    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+    return { isValid: false, message: `Fila ${row + 1}, ${columnName}: ${validation.message}` };
   }
 
   if (index === 3 && validation.conditional) {
@@ -58,7 +60,7 @@ function validateField(value, index, row) {
       allowedTypes = ["A", "V", "M"];
     }
     if (allowedTypes.length > 0 && !allowedTypes.includes(text.toUpperCase())) {
-      return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+      return { isValid: false, message: `Fila ${row + 1}, ${columnName}: ${validation.message}` };
     }
   }
 
