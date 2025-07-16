@@ -74,6 +74,11 @@ td[contenteditable="true"]:focus {
   background-color: #ffe0e0 !important; /* Light red background */
 }
 
+.invalid-cell-optional {
+    border: 1px solid #ffbd00 !important;
+    background-color: #fff2cc !important;
+}
+
 /* General Body Styles */
 body {
   font-family: 'Nunito', sans-serif;

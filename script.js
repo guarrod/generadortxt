@@ -86,13 +86,19 @@ function validateCell(cell, columnIndex) {
   const text = cell.textContent.trim();
   const rowIndex = cell.parentElement.rowIndex - 1;
   const validationResult = validateField(text, columnIndex, rowIndex);
+  const optionalColumns = [5, 6, 7];
 
   const key = `row-${rowIndex}-col-${columnIndex}`;
   if (!validationResult.isValid) {
-    cell.classList.add('invalid-cell');
+    if (optionalColumns.includes(columnIndex)) {
+      cell.classList.add('invalid-cell-optional');
+    } else {
+      cell.classList.add('invalid-cell');
+    }
     validations[key] = validationResult.message;
   } else {
     cell.classList.remove('invalid-cell');
+    cell.classList.remove('invalid-cell-optional');
     delete validations[key];
   }
   displayValidationErrors();
