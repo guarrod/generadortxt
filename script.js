@@ -1,155 +1,94 @@
 let dataTable; // Declare dataTable globally
+let validations = [];
+
+function validateField(value, index, row) {
+  const text = value.trim();
+  const columnValidations = [
+    // Col 0: Código: Alphanumeric, Max 50 chars, Required
+    { regex: /^[a-zA-Z0-9]*$/, maxLength: 50, required: true, message: "Código: Alfanumérico, máximo 50 caracteres." },
+    // Col 1: Descripcion: Alphanumeric, Max 100 chars, Required
+    { regex: /^[a-zA-Z0-9\s]*$/, maxLength: 100, required: true, message: "Descripción: Alfanumérico, máximo 100 caracteres." },
+    // Col 2: Forma de pago: "CTA" or "TAR", Required
+    { options: ["CTA", "TAR"], required: true, message: "Forma de pago: CTA o TAR." },
+    // Col 3: Tipo de cuenta/tarjeta: Conditional validation, Required
+    { conditional: true, required: true, message: "Tipo de cuenta/tarjeta: A, V, M para TAR; CTE, AHO para CTA." },
+    // Col 4: Numero de cuenta/Tarjeta: Alphanumeric, Max 20, Required
+    { regex: /^[a-zA-Z0-9]*$/, maxLength: 20, required: true, message: "Número de cuenta/Tarjeta: Alfanumérico, máximo 20 caracteres." },
+    // Col 5: Monto máximo: Numeric (Not required for now based on problem description)
+    { numeric: true, message: "Monto máximo: Numérico." },
+    // Col 6: Email: Specific format, allowed chars, Max 100 (Not required for now)
+    { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, maxLength: 100, allowedCharsRegex: /^[a-zA-Z0-9@._\-]*$/, message: "Email: Formato de email inválido." },
+    // Col 7: Teléfono: Numeric, Max 10
+    { regex: /^[0-9]*$/, maxLength: 10, message: "Teléfono: 10 dígitos numéricos." }
+  ];
+
+  const validation = columnValidations[index];
+
+  if (validation.required && text.length === 0) {
+    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: Campo requerido.` };
+  }
+
+  if (validation.maxLength && text.length > validation.maxLength) {
+    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+  }
+
+  if (validation.regex && !validation.regex.test(text)) {
+    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+  }
+
+  if (validation.options && !validation.options.includes(text.toUpperCase())) {
+    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+  }
+
+  if (validation.numeric && text !== "" && (isNaN(parseFloat(text)) || !isFinite(text))) {
+    return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+  }
+
+  if (index === 3 && validation.conditional) {
+    const formaDePagoCell = document.getElementById('dataTable').rows[row].cells[2];
+    const formaDePagoValue = formaDePagoCell ? formaDePagoCell.textContent.trim().toUpperCase() : "";
+    let allowedTypes = [];
+    if (formaDePagoValue === "CTA") {
+      allowedTypes = ["CTE", "AHO"];
+    } else if (formaDePagoValue === "TAR") {
+      allowedTypes = ["A", "V", "M"];
+    }
+    if (allowedTypes.length > 0 && !allowedTypes.includes(text.toUpperCase())) {
+      return { isValid: false, message: `Fila ${row + 1}, Columna ${index + 1}: ${validation.message}` };
+    }
+  }
+
+  return { isValid: true, message: "" };
+}
+
+function displayValidationErrors() {
+  const validationList = document.querySelector('.validations ul');
+  validationList.innerHTML = '';
+  for (const key in validations) {
+    if (Object.hasOwnProperty.call(validations, key)) {
+      const message = validations[key];
+      const listItem = document.createElement('li');
+      listItem.textContent = message;
+      validationList.appendChild(listItem);
+    }
+  }
+}
 
 function validateCell(cell, columnIndex) {
   const text = cell.textContent.trim();
-  let isValid = true;
-  const columnValidations = [
-    // Col 0: Código: Alphanumeric, Max 50 chars, Required
-    { regex: /^[a-zA-Z0-9]*$/, maxLength: 50, required: true },
-    // Col 1: Descripcion: Alphanumeric, Max 100 chars, Required
-    { regex: /^[a-zA-Z0-9\s]*$/, maxLength: 100, required: true }, // Added \s for spaces
-    // Col 2: Forma de pago: "CTA" or "TAR", Required
-    { options: ["CTA", "TAR"], required: true },
-    // Col 3: Tipo de cuenta/tarjeta: Conditional validation, Required
-    { conditional: true, required: true },
-    // Col 4: Numero de cuenta/Tarjeta: Alphanumeric, Max 20, Required
-    { regex: /^[a-zA-Z0-9]*$/, maxLength: 20, required: true },
-    // Col 5: Monto máximo: Numeric (Not required for now based on problem description)
-    { numeric: true },
-    // Col 6: Email: Specific format, allowed chars, Max 100 (Not required for now)
-    { regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, maxLength: 100, allowedCharsRegex: /^[a-zA-Z0-9@._\-]*$/ },
-    // Col 7: Teléfono: Numeric, Max 10
-    { regex: /^[0-9]*$/, maxLength: 10 }
-  ];
+  const rowIndex = cell.parentElement.rowIndex - 1;
+  const validationResult = validateField(text, columnIndex, rowIndex);
 
-  const validation = columnValidations[columnIndex];
-  cell.classList.remove('invalid-cell'); // Reset style first
-
-  // Specific handling for Email column (index 6) to make it optional
-  if (columnIndex === 6) {
-    if (text.length === 0) {
-      isValid = true; // Empty email is explicitly valid
-    } else {
-      // Not empty, so apply all existing email validation rules
-      if (validation.maxLength && text.length > validation.maxLength) isValid = false;
-      if (isValid && validation.allowedCharsRegex && !validation.allowedCharsRegex.test(text)) isValid = false;
-      if (isValid && validation.regex && !validation.regex.test(text)) isValid = false;
-    }
-    if (!isValid) {
-      cell.classList.add('invalid-cell');
-    }
-    return isValid; // Return early for email column
-  }
-  // Specific handling for Teléfono column (index 7) to make it optional and validate length
-  if (columnIndex === 7) {
-    if (text.length === 0) {
-      isValid = true; // Empty is valid
-      displayNotification("");
-    } else {
-      // Not empty, so apply validation rules
-      if (!/^[0-9]*$/.test(text) || text.length !== 10) {
-        isValid = true;
-      } else {
-        isValid = true;
-        displayNotification("");
-      }
-    }
-    if (!isValid) {
-      cell.classList.add('invalid-cell');
-    }
-    return isValid; // Return early for this column
-  }
-
-  if (columnIndex === 3 && validation && validation.conditional) {
-    const formaDePagoCell = cell.parentElement.cells[2]; // Get 'Forma de pago' cell
-    const formaDePagoValue = formaDePagoCell ? formaDePagoCell.textContent.trim().toUpperCase() : "";
-    let allowedTypes = [];
-    // isValid is initialized to true at the start of the function.
-    // For column 3, we manage 'isValid' directly.
-
-    if (validation.required && text.length === 0) {
-      isValid = false;
-    } else if (text.length === 0 && !validation.required) { // Not required and empty
-      isValid = true; // This path won't be taken if required:true as per current subtask
-    } else {
-      // Field is not empty, or it's empty but not required (latter won't happen for col 3 now)
-      // Proceed with CTA/TAR logic
-      if (formaDePagoValue === "CTA") {
-        allowedTypes = ["CTE", "AHO"];
-      } else if (formaDePagoValue === "TAR") {
-        allowedTypes = ["A", "V", "M"];
-      }
-
-      if (allowedTypes.length > 0 && allowedTypes.includes(text.toUpperCase())) {
-        isValid = true;
-        cell.textContent = text.toUpperCase(); // Normalize to uppercase if valid
-      } else if (allowedTypes.length === 0 && text.length > 0) {
-        // Forma de pago is not CTA/TAR (or empty/invalid), so any non-empty text here is invalid
-        isValid = false;
-      } else if (allowedTypes.length > 0 && !allowedTypes.includes(text.toUpperCase())) {
-        // Forma de pago IS CTA/TAR, but text is not in the allowed list for it
-        isValid = false;
-      } else if (allowedTypes.length === 0 && text.length === 0 && validation.required) {
-        // This case means Forma de pago is not set, cell is empty, and it's required
-        isValid = false;
-      } else if (allowedTypes.length === 0 && text.length === 0 && !validation.required){
-        // Forma de pago not set, cell is empty, and not required
-        isValid = true;
-      }
-       // If text.length > 0 and allowedTypes is empty (meaning formaDePagoValue is not CTA/TAR), it's invalid.
-       // If text.length === 0, it's handled by required check.
-    }
-
-    if (!isValid) {
-      cell.classList.add('invalid-cell');
-    }
-    return isValid; // Return early for conditional logic of column 3
-  }
-
-  if (!validation) {
-    return true; // No validation for this column (already handled if !validation at start)
-  }
-
-  // Standard validation checks - proceed if isValid is still true
-  if (isValid && validation.maxLength && text.length > validation.maxLength) {
-    isValid = false;
-  }
-
-  if (isValid && validation.allowedCharsRegex && !validation.allowedCharsRegex.test(text)) {
-    isValid = false;
-  }
-
-  if (isValid && validation.regex && !validation.regex.test(text)) {
-    isValid = false;
-  }
-
-  if (isValid && validation.options) {
-    if (!validation.options.includes(text.toUpperCase())) {
-      isValid = false;
-    } else {
-      cell.textContent = text.toUpperCase(); // Normalize
-    }
-  }
-
-  if (isValid && validation.numeric) {
-    if (text !== "" && (isNaN(parseFloat(text)) || !isFinite(text))) {
-      isValid = false;
-    }
-    // Note: if numeric is also required, empty string "" will be caught by the 'required' check below.
-    // If numeric is NOT required, empty string "" is currently valid for numeric.
-  }
-
-  // General 'required' check: if the field is required and empty, it's invalid.
-  // This catches cases where an empty string might pass other rules (e.g., regex with '*')
-  // but is not allowed due to being required.
-  if (validation.required && text.length === 0) {
-    isValid = false;
-  }
-
-  if (!isValid) {
+  const key = `row-${rowIndex}-col-${columnIndex}`;
+  if (!validationResult.isValid) {
     cell.classList.add('invalid-cell');
+    validations[key] = validationResult.message;
+  } else {
+    cell.classList.remove('invalid-cell');
+    delete validations[key];
   }
-  return isValid;
+  displayValidationErrors();
+  return validationResult.isValid;
 }
 
 function checkRowIsEmpty(rowElement) {
@@ -288,11 +227,14 @@ document.addEventListener('DOMContentLoaded', () => {
       for (const columnIndex of mandatoryColumnIndices) {
         const cell = row.cells[columnIndex];
         if (cell && cell.textContent.trim() === "") {
-          displayNotification("Todas las filas deben tener completos los campos: Código, Descripción, Forma de pago, Tipo de cuenta/tarjeta y Número de cuenta/Tarjeta para poder exportar.");
           validateCell(cell, columnIndex); // Ensure cell is styled
-          return;
         }
       }
+    }
+
+    if (Object.keys(validations).length > 0) {
+      displayNotification("Hay errores en el formulario. Por favor, corríjalos antes de exportar.");
+      return;
     }
 
     // 2. Validate Filename Input
