@@ -47,7 +47,7 @@ tr:last-child td:last-child {
 
 /* Styling for buttons */
 button {
-  padding: 10px 15px;
+  padding: 12px 15px;
   background-color: #d2006e;
   color: white;
   border: none;
@@ -164,18 +164,18 @@ table#dataTable {
 }
 
 .info-box h4 {
-  margin-top: 0;
+  margin: 0;
   color: #160f41;
   font-size: 1.2em;
 }
 
 .info-box ul {
   padding-left: 20px;
-  margin-bottom: 0;
+  margin: 16px 0 0 0;
 }
 
 .info-box li {
-  margin-bottom: 8px;
+  margin-bottom: 0px;
   font-size: 0.9em;
 }
 
@@ -216,10 +216,13 @@ table#dataTable {
 }
 
 .filename-input-area input[type="text"] {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 2px solid #F3F3F3;
   min-width: 250px; /* Decent width for input */
+  &::placeholder {
+  color: #b5b5b5;
+}
 }
 
 

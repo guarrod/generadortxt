@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
       for (const columnIndex of mandatoryColumnIndices) {
         const cell = row.cells[columnIndex];
         if (cell && cell.textContent.trim() === "") {
-          displayNotification("Todas las filas deben tener completos los campos: Código, Descripcion, Forma de pago, Tipo de cuenta/tarjeta y Numero de cuenta/Tarjeta para poder exportar.");
+          displayNotification("Todas las filas deben tener completos los campos: Código, Descripción, Forma de pago, Tipo de cuenta/tarjeta y Número de cuenta/Tarjeta para poder exportar.");
           validateCell(cell, columnIndex); // Ensure cell is styled
           return;
         }
