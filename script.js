@@ -253,7 +253,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (Object.keys(validations).length > 0) {
       displayNotification("Hay errores en el formulario. Por favor, corríjalos antes de exportar.");
       return;
-    }
+  } else {
+      displayNotification("Formulario listo para exportar.");
+  }
 
     // 2. Validate Filename Input
     // Ensure filenameInput exists before accessing its value
